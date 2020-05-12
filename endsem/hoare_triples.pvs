@@ -1,0 +1,117 @@
+%Part-2: Formalization of semantics of the Hoare rules of inference
+hoare_triples  % [ parameters ]
+		: THEORY
+
+  BEGIN
+
+  % ASSUMING
+   % assuming declarations
+  % ENDASSUMING
+
+  IMPORTING Hoare_logic
+
+  s: VAR state
+  
+  assertion: TYPE = [state -> bool]
+
+  P, Q, R, P1, P2, Q1, Q2, pre, post: VAR assertion
+
+  C: VAR test
+
+  A: VAR assignment
+
+  S, S1, S2: VAR program
+
+  X: VAR trace
+  
+  triple_holds(pre, S, post)(X): bool =
+     pre(first(X)) AND [| S |](X) => post(last(X))
+
+  triple_valid(pre, S, post): bool =
+      (FORALL X: triple_holds(pre, S, post)(X))
+
+  %% Soundness lemmas for Hoare inference rules
+  skip_rule: LEMMA triple_valid(P, skip, P)
+
+  assignment_rule: LEMMA triple_valid(P o A, assign(A), P);
+
+  x_gets_x_plus_1: assignment = (LAMBDA (s): s WITH [(0) := s(0)+1]);
+
+  x_plus_y_check: LEMMA triple_valid((LAMBDA(s): s(0) >= 0), assign(x_gets_x_plus_1), (LAMBDA (s): s(0) > 0));
+
+  %boolean operations on assertion objects
+  /\(P, Q)(s): bool = P(s) AND Q(s);
+  
+  //(P, Q)(s): bool = (P(s) OR Q(s));
+  
+  ~(C)(s): bool =  NOT C(s);
+
+  =>(P, Q)(s): bool = P(s) => Q(s);
+
+  sanityOnAsserts: LEMMA ((P => Q1) /\ (~P => Q2)) = ((P /\ Q1) // (~P /\ Q2))
+
+  conditional_rule: LEMMA  triple_valid(pre /\ C, S1, post) AND triple_valid(pre /\ ~C, S2, post)
+                                  => triple_valid(pre, (IF C THEN S1 ELSE S2 ENDIF), post)
+
+  composition_rule: LEMMA  triple_valid(P, S1, Q) AND triple_valid(Q, S2, R)
+                                  => triple_valid(P, S1 ## S2, R)
+
+
+  % Note about auto-rewrite based proofs: you need replace of some equalities in antecedents generated after skeep
+  % grind does this automatically; a grind-less proof has to make this happen via replace
+  while_rule: LEMMA triple_valid(P /\ C, S, P)  => triple_valid(P, C ** S, P /\ ~C)
+
+  conseq(P, Q): bool =  (FORALL s: P(s) => Q(s))
+   
+  %P1, Q1: VAR assertion
+  conseq_rule: LEMMA  conseq(P, P1) AND conseq(Q1, Q)  AND triple_valid(P1, S, Q1)
+                                   => triple_valid(P, S, Q)
+
+%while rule of Hoare defines only the strongest postcondition RELATIVE to supplied invariant P
+ %Hence there is no guarantee that the invariant P is string enought to prove the post condition Q upon exit
+ %Q: can we define weakest liberal precondition for any give post condition for a loop?
+ %A: Cannot be done syntactically (a la Hoare rules), but semantically as fixed-point
+ %A: computed using the op semantics [| |]
+ %This formalization is shown below
+  %S: VAR program
+  %Q: VAR assertion
+  %s: VAR state
+  wlp(S)(Q)(s) : bool = (FORALL (X: trace): ([| S |](X) AND s = first(X)) => Q(last(X)))
+
+  % Sanity lemma for wlp definition
+  wlp_valid: LEMMA triple_valid(wlp(S)(Q), S, Q)
+
+  %wlp is unique
+  wlp_unique: LEMMA (P1 = wlp(S)(Q)) AND (P2 = wlp(S)(Q)) IMPLIES (P1 = P2)
+  
+
+  st: state
+  %tr: trace = (# length := 2, seq :=  zerost WITH [(0) := st, (1) := st] #)
+  % Some properties of wlp
+
+  skiptr: trace = empty_seq[state] WITH [length := 2, seq := (LAMBDA (i: below[2]): st1)]
+  mkskiptr(st: state): trace = empty_seq[state] WITH [length := 2, seq := (LAMBDA (i: below[2]): st) ]
+
+  wlp_skip: LEMMA wlp(skip)(Q) = Q
+
+  mkassigntr(st: state, a: assignment): trace =
+     empty_seq[state] WITH [length := 2,
+                            seq := (LAMBDA (i: below[2]): st) WITH [(1):= a(st)] ]
+  wlp_assign: LEMMA wlp(assign(A))(Q) = Q o A
+
+  wlp_seq: LEMMA wlp(S1 ## S2)(Q) = wlp(S1)(wlp(S2)(Q))
+
+  %1*Exercise: Included in the Final Project
+  wlp_cond: LEMMA wlp(IF C THEN S1 ELSE S2 ENDIF)(Q) =
+                      (C /\ wlp(S1)(Q)) // (~C /\ wlp(S2)(Q))
+
+  %wlp_conseq: LEMMA ((P => Q) /\ wlp(S)(Q)) IMPLIES triple_valid(P /\ wlp(S)(Q), S, Q)
+
+  %wlp(S)(Q) is always is a loop invariant for S = C ** S1 strong enough to prove given post condition Q
+  %This property is proved below by induction on the length of traces (# of iterations) to exit loop
+  %2**Exercise: Included in the Final Project Assignment
+
+wlp_is_inv: LEMMA S = (C ** S1) => triple_valid(wlp(S)(Q) /\ C, S1, wlp(S)(Q))
+
+
+  END hoare_triples

@@ -1,0 +1,213 @@
+%Part-3: A Proof Checker for Hoare Proofs in PVS
+hoare_logic_proofs  % [ parameters ]
+		: THEORY
+
+  BEGIN
+
+  % ASSUMING
+   % assuming declarations
+  % ENDASSUMING
+
+  %In this theory we develop a scheme for representing in PVS proofs of programs in Hoare Logic
+  %This is done by defining an inductive datatype (preProof) an element of which is a proof in Hoare Logic
+  %We define in PVS a proof checker (Proof?) that certifies consistency of a Hoare proof
+  %We then prove in PVS the soundness and completeness (wlp_proof) of Hoare Logic
+
+  IMPORTING hoare_triples
+
+  S, S1, S2: VAR program
+  Q: VAR assertion
+  s: VAR state
+  A: VAR assignment
+
+  triple: TYPE = [# prog: program, pre, post: assertion #]
+  tr: triple = (# prog := skip, pre := (LAMBDA s: true), post := (LAMBDA s: true) #)
+  
+  H, G: VAR triple
+  
+  C, P, R, P1, P2: VAR assertion
+  
+  %A proof in Hoare Logic as an object of an inductive datatype
+  %A proof object is a tree of Hoare triples where each triple is supposed to
+  %have been deduced as an instantiaton of a Hoar einference rule
+  preProof: DATATYPE
+  BEGIN
+    skip_step(conclusion: triple): skip_step?
+    assign_step(conclusion: triple): assign_step?
+    ift_step(conclusion: triple, thenProof, elseProof: preProof): ift_step?
+    while_step(conclusion: triple, bodyProof: preProof): while_step?
+    seq_step(conclusion: triple, left, right: preProof): seq_step?
+    conseq_step(conclusion: triple, subProof: preProof): conseq_step?
+  END preProof
+  
+
+  % Some variables ranging over Hoare proofs
+  M, M1, M2: VAR preProof
+
+  Proof?(M): RECURSIVE bool =
+    CASES M OF
+      skip_step(H): skip?(H`prog) AND H`pre = H`post,
+ %     assign_step(H): assign?(H`prog) AND H`pre = H`post o update(H`prog),
+      assign_step(H): assign?(H`prog) AND H`pre = H`post o update(H`prog),
+      ift_step(H, M1, M2): ift?(H`prog)
+                           AND conclusion(M1)`pre = (H`pre /\ ifcond(H`prog))
+			   AND conclusion(M2)`pre = (H`pre /\ ~ifcond(H`prog))
+                           AND conclusion(M1)`post = H`post
+                           AND conclusion(M2)`post = H`post
+                           AND conclusion(M1)`prog = thenprog(H`prog)
+                           AND conclusion(M2)`prog = elseprog(H`prog)
+                           AND Proof?(M1)
+                           AND Proof?(M2),
+       while_step(H, M1): while?(H`prog)
+                          AND conclusion(M1)`pre = (H`pre /\ wcond(H`prog))
+                          AND conclusion(M1)`post = H`pre
+                          AND conclusion(M1)`prog = body(H`prog)
+                          AND H`post = (H`pre /\ ~wcond(H`prog))
+                          AND Proof?(M1),
+       seq_step(H, M1, M2): seq?(H`prog)
+                            AND conclusion(M1)`pre = H`pre
+                            AND conclusion(M2)`pre = conclusion(M1)`post
+                            AND conclusion(M2)`post = H`post
+                            AND conclusion(M1)`prog = left(H`prog)
+                            AND conclusion(M2)`prog = right(H`prog)
+                            AND Proof?(M1)
+                            AND Proof?(M2),
+        conseq_step(H, M1): conseq(H`pre, conclusion(M1)`pre)
+                            AND conseq(conclusion(M1)`post, H`post)
+                            AND conclusion(M1)`prog = H`prog
+                            AND Proof?(M1)
+    ENDCASES
+    MEASURE M BY <<
+
+
+  %Exercize 2:
+  %defined in hoare_logic.pvs
+  %x_gets_y: assignment = a2 %x := y
+  %y_gets_z: assignment = a3 % y := z
+  %z_gets_w: assignment = (LAMBDA (s): s WITH [(2) := s(3)]) % z := w
+  %w_gets_x: assignment = (LAMBDA (s): s WITH [(3) := s(0)]) % w := x
+  y_gets_x: assignment = (LAMBDA (s): s WITH [(1) := s(0)]) % y := x
+
+  sswap: program = (assign(x_gets_y) ## assign(y_gets_x))
+  
+  x0: nat; y0: nat; z0: nat; w0: nat;
+  xeqx0: assertion = (LAMBDA s: s(0)=x0); yeqy0: assertion = (LAMBDA s: s(1)=y0);
+  xeqy: assertion = (LAMBDA s: s(0)=s(1)); xeqy0: assertion = (LAMBDA s: s(0)=y0);
+  yeqx0: assertion = (LAMBDA s: s(1)=x0); zeqz0: assertion = (LAMBDA s: s(2)=z0);
+  weqw0: assertion = (LAMBDA s: s(3)=w0);
+  tr1: triple = (# pre := xeqy0, prog := assign(y_gets_x), post := xeqy /\ yeqy0 #)
+
+  y_gets_x_step: preProof = assign_step(tr1)
+  x_gets_y_step: preProof = assign_step((# pre := yeqy0, prog := assign(x_gets_y), post := xeqy0 #))
+ 
+  sswap_prf: preProof = seq_step((# prog := sswap, pre := yeqy0, post := xeqy /\ yeqy0#),
+                                 x_gets_y_step, y_gets_x_step)
+
+  check: LEMMA xeqy0 = (xeqy /\ yeqy0) o y_gets_x
+
+  checksswap_prf: LEMMA Proof?(sswap_prf)
+
+  %1*Exercize: Included in the Final Project Assignment
+  %Exercize 3: Formalize your Hoare proof on the MidTerm as preProof
+  %Certify your proof in PVS using Proof?
+
+  % The solution to the MidTerm problem is formalized as a preProof below. We assume the indices 0, 1, 2
+  % and 3 represent r, x, y, and z respectively. Also, we omit proof graphs for statements which do not
+  % belong to our imperative language defined here and do not change state.
+
+  % We first write out the program step by step:
+
+  r_sub_eq_y: program = assign(LAMBDA (s: state): s WITH [(0) := IF s(0) >= s(2) THEN s(0) - s(2) ELSE 0 ENDIF])
+  z_add_eq_1: program = assign(LAMBDA (s: state): s WITH [(3) := s(3) + 1])
+  while_body: program = r_sub_eq_y ## z_add_eq_1
+  while_loop: program = (LAMBDA (s: state): s(2) <= s(0)) ** while_body 
+  init_r_x: program = assign(LAMBDA (s: state): s WITH [(0) := s(1)])
+  init_z_0: program = assign(LAMBDA (s: state): s WITH [(3) := 0])
+  prgm: program = init_r_x ## init_z_0 ## while_loop
+
+  % We now state some common assertions we will be using
+
+  x_quotient: assertion = LAMBDA (s: state): s(1) = s(0) + s(2) * s(3)				% x = r + y*z
+  x_corner: assertion = LAMBDA (s: state): s(1) = s(2) * s(3) + s(2)				% x = y*z + y
+  x_quotient_interm: assertion = LAMBDA (s: state): s(1) = s(0) + s(2) * s(3) + s(2)		% x = r + y*z + y
+  tru: assertion = LAMBDA (s: state): true
+  r_lt_y: assertion = LAMBDA (s: state): s(0) < s(2)
+  y_le_r: assertion = LAMBDA (s: state): s(2) <= s(0)
+  r_eq_x: assertion = LAMBDA (s: state): s(0) = s(1)
+  x_eq_x: assertion = LAMBDA (s: state): s(1) = s(1)
+  z_eq_0: assertion = LAMBDA (s: state): s(3) = 0
+  eq_0: assertion = LAMBDA (s: state): 0 = 0
+  x_pre: assertion = (y_le_r /\ x_quotient) // (x_corner /\ r_lt_y) 
+  
+  % We now write out all the triples,
+
+  trp1: triple 	 = (# pre := x_pre,		   prog := r_sub_eq_y,		 post := x_quotient_interm		#)
+  trp2: triple	 = (# pre := x_quotient /\ y_le_r, prog := r_sub_eq_y,		 post := x_quotient_interm		#)
+  trp3: triple 	 = (# pre := x_quotient_interm,    prog := z_add_eq_1, 		 post := x_quotient 			#)
+  trp4: triple 	 = (# pre := x_quotient /\ y_le_r, prog := while_body,		 post := x_quotient 			#)
+  trp5: triple 	 = (# pre := x_quotient, 	   prog := while_loop, 		 post := x_quotient /\ r_lt_y		#)
+  trp6: triple 	 = (# pre := tru,		   prog := init_r_x,		 post := r_eq_x				#)
+  trp7: triple 	 = (# pre := r_eq_x,   		   prog := init_z_0,		 post := r_eq_x /\ z_eq_0		#)
+  trp8: triple 	 = (# pre := tru,		   prog := init_r_x ## init_z_0, post := r_eq_x /\ z_eq_0		#)
+  trp9: triple	 = (# pre := r_eq_x /\ z_eq_0, 	   prog := while_loop, 		 post := x_quotient /\ r_lt_y		#)
+  trp10: triple	 = (# pre := tru,		   prog := prgm,       		 post := x_quotient /\ r_lt_y 		#)
+
+  % Finally, we can construct the proof object.
+
+  prf1: preProof = assign_step(trp1)
+  prf2: preProof = conseq_step(trp2, prf1)
+  prf3: preProof = assign_step(trp3)
+  prf4: preProof = seq_step(trp4, prf2, prf3)
+  prf5: preProof = while_step(trp5, prf4)
+  prf6: preProof = assign_step(trp6)
+  prf7: preProof = assign_step(trp7)
+  prf8: preProof = seq_step(trp8, prf6, prf7)
+  prf9: preProof = conseq_step(trp9, prf5)
+  prf10: preProof = seq_step(trp10, prf8, prf9)
+
+  % The following lemma certifies the proof via Proof?
+  prgm_correct: LEMMA Proof?(prf10)
+  
+  %Soundness Theorem for partial correctness of Hoare Logic
+  valid(H): bool = triple_valid(H`pre, H`prog, H`post)
+  
+  soundness: LEMMA  Proof?(M) => valid(conclusion(M))
+
+  % What does completeness mean for Hoare Logic?
+  % FORALL (S: Prog, P,Q: assertion): triple_valid(P, S, Q) => (EXISTS (M: preProof): Proof?(M)
+  % Why should Hoare Logic be complete and, if so, how would you prove it?
+  % First question boils down to can we always find a Loop Invariant to construct a Hoare proof?
+  % Intuition: the weakest liberal precondition wlp(S)(Q) can awlays be used to construct a proof
+  % For straight-line programs we have already seen how to construct wlp syntactically
+  % What's a general definition that applies to all constructs including loops?
+  %S: VAR program
+  %Q: VAR assertion
+  %s: VAR state
+  % wlp(S)(Q)(s) : bool = (FORALL (X: trace): [| S |](X) AND s = first(X) => Q(last(X)))
+
+  %Exercize1: Define stronget post condition sp(S)(P) similar to wlp
+  %Formulate and prove a sanity lemma for sp similar to the one shown above
+
+  Proves(M, H): bool = Proof?(M) AND conclusion(M) = H
+
+  %Completeness for Partial Correctness proofs in Hoare Logic
+  %For every program S and an assertion Q
+  %mkTriple(wlp(S)(Q), S, Q)))
+  mkTriple(pre: assertion, p: program, post: assertion): triple = (# pre:= pre, prog:= p, post:= post #)
+  mkpreProof_skip(Q): preProof = skip_step(mkTriple(Q, skip, Q))
+  mkpreProof_assign(Q, A): preProof = assign_step(mkTriple(Q o A, assign(A), Q))
+
+  mkpreProof_conseq_step(ppre:assertion, ppost: assertion, prog: program, M: preProof): preProof =
+     conseq_step(mkTriple(ppre, conclusion(M)`prog, ppost), M)
+  mkpreProof_ift_step(S, C, Q, M1, M2): preProof =
+     ift_step(mkTriple(wlp(S)(Q), S, Q),
+                        mkpreProof_conseq_step( C  /\ conclusion(M1)`pre, Q, conclusion(M1)`prog, M1),
+                        mkpreProof_conseq_step( ~C /\ conclusion(M2)`pre, Q, conclusion(M2)`prog, M2))
+ %                      IF C THEN conclusion(M1)`prog ELSE conclusion(M2)`prog ENDIF, , M1, M2)
+  
+  %%2**Exercise: Included in Final Project Assignment Problems
+  Hoare_Completeness:
+    LEMMA (FORALL S, Q: (EXISTS M: Proves(M, mkTriple(wlp(S)(Q), S, Q))) )
+ 
+
+  END hoare_logic_proofs

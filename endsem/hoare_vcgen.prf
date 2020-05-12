@@ -1,0 +1,262 @@
+(hoare_vcgen
+ (extract_TCC1 0
+  (extract_TCC1-1 nil 3798303093 ("" (termination-tcc) nil nil) nil
+   nil))
+ (extract_TCC2 0
+  (extract_TCC2-1 nil 3798303093 ("" (termination-tcc) nil nil) nil
+   nil))
+ (extract_TCC3 0
+  (extract_TCC3-1 nil 3798303093 ("" (termination-tcc) nil nil) nil
+   nil))
+ (extract_TCC4 0
+  (extract_TCC4-1 nil 3798303093 ("" (termination-tcc) nil nil) nil
+   nil))
+ (extract_TCC5 0
+  (extract_TCC5-1 nil 3798303093 ("" (termination-tcc) nil nil) nil
+   nil))
+ (vc_pre 0
+  (vc_pre-1 nil 3798303888
+   ("" (auto-rewrite-defs)
+    (("" (induct "SS")
+      (("1" (grind) nil nil) ("2" (grind) nil nil)
+       ("3" (grind) nil nil)
+       ("4" (skosimp*)
+        (("4" (expand "vc" -2)
+          (("4" (flatten -2)
+            (("4" (instantiate -1 "while3_var!1")
+              (("4" (prop)
+                (("4" (expand "pre" 1)
+                  (("4" (expand "extract" 1)
+                    (("4"
+                      (case "conseq(while1_var!1 /\\ while3_var!1, pre(while2_var!1)(while3_var!1))")
+                      (("1" (delete -4)
+                        (("1"
+                          (case "conseq(~while1_var!1 /\\ while3_var!1, Q!1)")
+                          (("1" (delete -5)
+                            (("1"
+                              (case "FORALL (q: assertion): conseq(q, q)")
+                              (("1"
+                                (case
+                                 "triple_valid(while3_var!1, while1_var!1 ** extract(while2_var!1), ~while1_var!1 /\\ while3_var!1)")
+                                (("1"
+                                  (delete -4 -5 -6)
+                                  (("1"
+                                    (instantiate -2 "while3_var!1")
+                                    (("1"
+                                      (grind
+                                       :rewrites
+                                       "conseq_rule"
+                                       :exclude
+                                       "[||]")
+                                      nil
+                                      nil))
+                                    nil))
+                                  nil)
+                                 ("2"
+                                  (case
+                                   "triple_valid(while3_var!1 /\\while1_var!1, extract(while2_var!1), while3_var!1)")
+                                  (("1"
+                                    (delete -2 -3 -4 -5 -6 2)
+                                    (("1"
+                                      (case
+                                       "(~while1_var!1 /\\ while3_var!1) = (while3_var!1 /\\ ~while1_var!1)")
+                                      (("1"
+                                        (rewrite -1 1)
+                                        (("1"
+                                          (lemma
+                                           "while_rule"
+                                           ("P"
+                                            "while3_var!1"
+                                            "C"
+                                            "while1_var!1"
+                                            "S"
+                                            "extract(while2_var!1)"))
+                                          (("1" (prop) nil nil))
+                                          nil))
+                                        nil)
+                                       ("2"
+                                        (delete -1 2)
+                                        (("2"
+                                          (apply-extensionality)
+                                          (("2"
+                                            (delete 2)
+                                            (("2" (grind) nil nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil)
+                                   ("2"
+                                    (instantiate -1 "while3_var!1")
+                                    (("2"
+                                      (delete -2 -5 2 3)
+                                      (("2"
+                                        (grind
+                                         :rewrites
+                                         "conseq_rule"
+                                         :exclude
+                                         "[||]")
+                                        nil
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil)
+                               ("2"
+                                (delete -1 -2 -3 -4 2)
+                                (("2" (grind) nil nil))
+                                nil))
+                              nil))
+                            nil)
+                           ("2" (delete -1 -2 -3 2)
+                            (("2" (expand "conseq")
+                              (("2" (grind) nil nil)) nil))
+                            nil))
+                          nil))
+                        nil)
+                       ("2" (delete -1 -2 -4 2)
+                        (("2" (expand "conseq") (("2" (grind) nil nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil)
+       ("5" (grind) nil nil))
+      nil))
+    nil)
+   ((O const-decl "finseq" finite_sequences nil)
+    (splice const-decl "trace" Hoare_logic nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (=> const-decl "bool" hoare_triples nil)
+    (while? adt-recognizer-decl "[program -> boolean]" Hoare_logic nil)
+    (** adt-constructor-decl "[[test, program] -> (while?)]"
+     Hoare_logic nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (while_rule formula-decl nil hoare_triples nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (test type-eq-decl nil Hoare_logic nil)
+    (conseq const-decl "bool" hoare_triples nil)
+    (/\\ const-decl "bool" hoare_triples nil)
+    (~ const-decl "bool" hoare_triples nil)
+    (// const-decl "bool" hoare_triples nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (O const-decl "T3" function_props nil)
+    (first const-decl "state" Hoare_logic nil)
+    (last const-decl "state" Hoare_logic nil)
+    ([\|\|] def-decl "bool" Hoare_logic nil)
+    (triple_holds const-decl "bool" hoare_triples nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (> const-decl "bool" reals nil)
+    (below type-eq-decl nil nat_types nil)
+    (finseq type-eq-decl nil finite_sequences nil)
+    (trace type-eq-decl nil Hoare_logic nil)
+    (annotatedProgram_induction formula-decl nil hoare_vcgen nil)
+    (extract def-decl "program" hoare_vcgen nil)
+    (pre def-decl "assertion" hoare_vcgen nil)
+    (triple_valid const-decl "bool" hoare_triples nil)
+    (program type-decl nil Hoare_logic nil)
+    (vc def-decl "bool" hoare_vcgen nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (assertion type-eq-decl nil hoare_triples nil)
+    (state type-eq-decl nil Hoare_logic nil)
+    (value type-eq-decl nil Hoare_logic nil)
+    (below type-eq-decl nil naturalnumbers nil)
+    (< const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (annotatedProgram type-decl nil hoare_vcgen nil))
+   shostak))
+ (slow_div_TCC1 0
+  (slow_div_TCC1-1 nil 3798303093 ("" (subtype-tcc) nil nil) nil nil))
+ (slow_div_correct 0
+  (slow_div_correct-1 nil 3798303094
+   ("" (auto-rewrite-defs)
+    (("" (case "precond = pre(slow_div)(postcond)")
+      (("1" (replace -1 1)
+        (("1" (delete -1)
+          (("1" (lemma "vc_pre" ("SS" "slow_div" "Q" "postcond"))
+            (("1" (prop) (("1" (delete 2) (("1" (grind) nil nil)) nil))
+              nil))
+            nil))
+          nil))
+        nil)
+       ("2" (delete 2)
+        (("2" (grind) (("2" (apply-extensionality) nil nil)) nil))
+        nil))
+      nil))
+    nil)
+   ((numfield nonempty-type-eq-decl nil number_fields nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (* const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (vc_pre formula-decl nil hoare_vcgen nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (real_le_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (int_plus_int_is_int application-judgement "int" integers nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (~ const-decl "bool" hoare_triples nil)
+    (=> const-decl "bool" hoare_triples nil)
+    (O const-decl "T3" function_props nil)
+    (/\\ const-decl "bool" hoare_triples nil)
+    (vc def-decl "bool" hoare_vcgen nil)
+    (nnint_times_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (mult_divides1 application-judgement "(divides(n))" divides nil)
+    (mult_divides2 application-judgement "(divides(m))" divides nil)
+    (number nonempty-type-decl nil numbers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (< const-decl "bool" reals nil)
+    (below type-eq-decl nil naturalnumbers nil)
+    (value type-eq-decl nil Hoare_logic nil)
+    (state type-eq-decl nil Hoare_logic nil)
+    (assertion type-eq-decl nil hoare_triples nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (precond const-decl "assertion" hoare_vcgen nil)
+    (annotatedProgram type-decl nil hoare_vcgen nil)
+    (pre def-decl "assertion" hoare_vcgen nil)
+    (slow_div const-decl "annotatedProgram" hoare_vcgen nil)
+    (postcond const-decl "assertion" hoare_vcgen nil))
+   shostak)))
+

@@ -1,0 +1,167 @@
+%Part 1: Formalization of operational semantics programs
+Hoare_logic  % [ parameters ]
+		: THEORY
+		
+  BEGIN
+
+  % ASSUMING
+   % assuming declarations
+  % ENDASSUMING
+
+  % values the program variables range over
+  value: TYPE = nat
+
+  %Could have modeled as state: TYPE = finseq[value] allowing arbitrary # of vars
+  %but have simplified so vars are numbered 0...3
+  state: TYPE = [below(4) -> value]
+  zerost: state = (LAMBDA (i: below[4]): 0)
+  onest: state = zerost WITH [(0) := 1]
+  
+  test: TYPE = pred[state]
+  
+  %assignment: TYPE = [s : state -> {t: state | t`length = s`length}]
+  % Shallow embedding: variables and expressions are abstracted out of program
+  assignment: TYPE = [state -> state]
+
+  program : DATATYPE
+   BEGIN
+    skip: skip?
+    assign(update : assignment): assign? 
+    if (ifcond: test, thenprog: program, elseprog: program): ift? %overloads IF .. THEN .. ELSE ... ENDIF
+    **(wcond: test, body : program): while?
+    ##(left, right: program): seq? %seq left assoc
+  END program
+
+
+%  Q, Q1, Q2: VAR program
+  c : VAR test
+  a : VAR assignment
+  s, r, t: VAR state
+
+  
+  trace : TYPE = {x : finseq[state] | x`length > 1}
+  st1, st2: state
+  tr2: trace = (# length := 2, seq := (LAMBDA (i: below[4]): zerost) #)
+  tr2p: trace = tr2 WITH [seq:= tr2`seq WITH [(0):= st1]]
+  
+  X, Y, Z: VAR trace
+  first(X): state = X`seq(0)
+  last(X): state = X`seq(X`length - 1)
+  splice(X, (Y | first(Y) = last(X))): trace = X o Y %appends only if last and first match
+
+  programSize(Q: program): RECURSIVE nat =
+    CASES Q OF
+      skip: 1,
+      assign(a): 1, 
+%      ift(C, S1, S2): 1 + programSize(S1) + programSize(S2),
+      if(c, q1, q2): 1 + programSize(q1) + programSize(q2),
+      
+%      while(C, S1): 1 + programSize(S1),
+      **(c, q1): 1 + programSize(q1),
+      
+%      seq(S1, S2): programSize(S1) + programSize(S2)
+      ##(q1, q2): programSize(q1) + programSize(q2)
+    ENDCASES
+     MEASURE Q BY <<
+
+
+
+
+C, C1: test;
+S1, S2: program;
+prog1: program = C ** (S1 ## S2);
+prog2: program = C ** (IF C THEN S1 ELSE S2 ENDIF ## S1)
+prog3: program = (LAMBDA (s: state): true) ** skip 
+
+  [||](Q: program)(X): RECURSIVE bool =
+    CASES Q OF
+      skip: (X`length = 2 AND last(X) = first(X)),
+      assign(A): (X`length = 2 AND last(X) = A(first(X))),
+      if(C, S1, S2): (IF C(first(X))
+                       THEN [||](S1)(X)
+                       ELSE [||](S2)(X) ENDIF),
+      **(C, S1): (IF C(first(X))
+                     THEN (EXISTS Y, Z: first(Z) = last(Y)
+                           AND X = splice(Y, Z)
+                           AND [||](S1)(Y)
+                           AND [||](Q)(Z))
+                     ELSE (X`length = 2 AND last(X) = first(X))
+                     ENDIF),
+      ##(S1, S2): (EXISTS Y, Z: first(Z) = last(Y)
+                    AND X = splice(Y, Z)
+                    AND [||](S1)(Y)
+                    AND [||](S2)(Z))
+      ENDCASES
+        MEASURE lex2(X`length, programSize(Q))
+    %Terminates on all finite sequences of arbitrary length
+    %Semantics adequate model terminating programs
+    %What is the semantics of non-terminating programs?  Empty set of traces
+
+   
+     test: LEMMA (first(X) = s AND [| skip |](X)) => last(X) = s
+
+     s0: state
+     a1: assignment = (LAMBDA (s): s WITH [(2) := s(0)]) % z := x
+     a2: assignment = (LAMBDA (s): s WITH [(0) := s(1)]) % x := y
+     a3: assignment = (LAMBDA (s): s WITH [(1) := s(2)]) % y := z
+
+     swap: program = assign(a1) ## assign(a2) ## assign(a3) % SWAP: z := x; x := y; y := z;
+
+     % This illustrates symbolic execution of program: execution correspnds to simulation on symbolic states
+     testswap: LEMMA [| swap |](X) => (last(X)(0) = first(X)(1) AND last(X)(1) = first(X)(0)) % y=x0 && x=y0
+
+     x_gets_y: assignment = a2 %x := y
+     y_gets_z: assignment = a3 % y := z
+     z_gets_w: assignment = (LAMBDA (s): s WITH [(2) := s(3)]) % z := w
+     w_gets_x: assignment = (LAMBDA (s): s WITH [(3) := s(0)]) % w := x
+     % rorate: x := y; y := z; z := w; w := x
+     rotate: program = assign(x_gets_y) ## assign(y_gets_z) ## assign(z_gets_w) ## assign(w_gets_x)
+
+     check_rotate: LEMMA [| rotate ## rotate ## rotate ## rotate |](X)
+                            => (last(X)(0)=first(X)(0) AND last(X)(1)=first(X)(1) AND
+			        last(X)(2)=first(X)(2) AND last(X)(3)=first(X)(3))
+
+     %Leaves maximum(x,y) in x: IF x < y THEN x := y ELSE skip ENDIF
+     cnd: test = (LAMBDA (s): (s(0) < s(1)))
+     %x_gets_y: assignment = (LAMBDA (s): s WITH [(0) := s(1)])
+     max: program = (IF cnd THEN assign(x_gets_y) ELSE skip ENDIF)
+
+     maximum(n, m: nat): nat = (IF n < m THEN m ELSE n ENDIF)     
+     testmax: LEMMA [| max |](X) => last(X)(0) = maximum(first(X)(0), first(X)(1))
+
+     % IF w<x THEN swap ELSE x_gets_y
+     w_lt_0: test = (LAMBDA (s): s(3) < s(0))
+     swap_or_max: program = IF w_lt_0 THEN swap ELSE assign(x_gets_y) ENDIF
+
+     checkswapmax: LEMMA ([| swap_or_max |](X) AND first(X)(0) = first(X)(1)) %x=y
+                              => last(X)(0) = last(X)(1)
+
+     % x := 0; while (x <10) do x++
+     x_gets_0: assignment = (LAMBDA (s): s WITH [(0) := 0])
+     x_inc: assignment = (LAMBDA (s): s WITH [(0) := s(0)+1])
+     inc_x_tilln: program = (LAMBDA (s): s(0) < 2) ** assign(x_inc)
+
+     run_inc_x_tilln: LEMMA ([| inc_x_tilln |](X) AND (first(X)(0) = 0) => (last(X)(0) = 2))
+
+%     verify_ixtn: LEMMA [| x_inc |](X) 
+
+     do_skip_forever: program = (LAMBDA (s): true) ** skip
+     
+     dsf_prop: LEMMA  NOT ([| do_skip_forever |](X)) %Can be proved by induction of length of X
+
+     Inv(s): bool = (s(0) <= 2) % x<=2
+
+     test_lt_2: test = (LAMBDA (s): s(0) < 2)
+     x_inc_inv_prop: LEMMA (Inv(first(Y)) AND test_lt_2(first(Y)) AND [| assign(x_inc) |](Y))
+                                      => Inv(last(Y))
+
+     inc_x_tilln_prop: LEMMA (Inv(first(X)) AND [| inc_x_tilln |](X)) => last(X)(0) = 2
+
+     %induction on length of X
+     verify_inc_x_tilln:
+       LEMMA (FORALL Y: (Inv(first(Y)) AND test_lt_2(first(Y)) AND
+                           [| assign(x_inc) |](Y)) => Inv(last(Y))) %Body preserves given Inv
+                => (FORALL X: ([| inc_x_tilln |](X) AND Inv(first(X))) => last(X)(0) = 2) %{Inv} inc_x_tilln {Post}
+
+
+  END Hoare_logic

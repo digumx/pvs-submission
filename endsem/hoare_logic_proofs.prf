@@ -1,0 +1,826 @@
+(hoare_logic_proofs
+ (Proof?_TCC1 0
+  (Proof?_TCC1-1 nil 3796628050 ("" (termination-tcc) nil nil) nil
+   nil))
+ (Proof?_TCC2 0
+  (Proof?_TCC2-1 nil 3796628050 ("" (termination-tcc) nil nil) nil
+   nil))
+ (Proof?_TCC3 0
+  (Proof?_TCC3-1 nil 3796628050 ("" (termination-tcc) nil nil) nil
+   nil))
+ (Proof?_TCC4 0
+  (Proof?_TCC4-1 nil 3796628050 ("" (termination-tcc) nil nil) nil
+   nil))
+ (Proof?_TCC5 0
+  (Proof?_TCC5-1 nil 3796628050 ("" (termination-tcc) nil nil) nil
+   nil))
+ (Proof?_TCC6 0
+  (Proof?_TCC6-1 nil 3796628050 ("" (termination-tcc) nil nil) nil
+   nil))
+ (r_sub_eq_y_TCC1 0
+  (r_sub_eq_y_TCC1-1 nil 3796628050 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (prgm_correct 0
+  (prgm_correct-1 nil 3796628057
+   ("" (auto-rewrite-theory hoare_logic_proofs)
+    (("" (grind)
+      (("1" (apply-extensionality) nil nil)
+       ("2" (apply-extensionality)
+        (("1" (delete 2) (("1" (grind) nil nil)) nil)
+         ("2" (delete 2) (("2" (grind) nil nil)) nil))
+        nil)
+       ("3" (apply-extensionality)
+        (("3" (delete 2) (("3" (grind) nil nil)) nil)) nil)
+       ("4" (apply-extensionality) nil nil)
+       ("5" (apply-extensionality) nil nil)
+       ("6" (apply-extensionality) nil nil))
+      nil))
+    nil)
+   ((init_r_x const-decl "program" hoare_logic_proofs nil)
+    (init_z_0 const-decl "program" hoare_logic_proofs nil)
+    (r_sub_eq_y const-decl "program" hoare_logic_proofs nil)
+    (z_add_eq_1 const-decl "program" hoare_logic_proofs nil)
+    (while_body const-decl "program" hoare_logic_proofs nil)
+    (while_loop const-decl "program" hoare_logic_proofs nil)
+    (prgm const-decl "program" hoare_logic_proofs nil)
+    (trp10 const-decl "triple" hoare_logic_proofs nil)
+    (trp8 const-decl "triple" hoare_logic_proofs nil)
+    (trp6 const-decl "triple" hoare_logic_proofs nil)
+    (prf6 const-decl "preProof" hoare_logic_proofs nil)
+    (trp7 const-decl "triple" hoare_logic_proofs nil)
+    (prf7 const-decl "preProof" hoare_logic_proofs nil)
+    (prf8 const-decl "preProof" hoare_logic_proofs nil)
+    (trp9 const-decl "triple" hoare_logic_proofs nil)
+    (trp5 const-decl "triple" hoare_logic_proofs nil)
+    (trp4 const-decl "triple" hoare_logic_proofs nil)
+    (trp2 const-decl "triple" hoare_logic_proofs nil)
+    (x_pre const-decl "assertion" hoare_logic_proofs nil)
+    (trp1 const-decl "triple" hoare_logic_proofs nil)
+    (prf1 const-decl "preProof" hoare_logic_proofs nil)
+    (prf2 const-decl "preProof" hoare_logic_proofs nil)
+    (trp3 const-decl "triple" hoare_logic_proofs nil)
+    (prf3 const-decl "preProof" hoare_logic_proofs nil)
+    (prf4 const-decl "preProof" hoare_logic_proofs nil)
+    (prf5 const-decl "preProof" hoare_logic_proofs nil)
+    (prf9 const-decl "preProof" hoare_logic_proofs nil)
+    (prf10 const-decl "preProof" hoare_logic_proofs nil)
+    (Proof? def-decl "bool" hoare_logic_proofs nil)
+    (r_eq_x const-decl "assertion" hoare_logic_proofs nil)
+    (z_eq_0 const-decl "assertion" hoare_logic_proofs nil)
+    (/\\ const-decl "bool" hoare_triples nil)
+    (x_quotient const-decl "assertion" hoare_logic_proofs nil)
+    (conseq const-decl "bool" hoare_triples nil)
+    (r_lt_y const-decl "assertion" hoare_logic_proofs nil)
+    (y_le_r const-decl "assertion" hoare_logic_proofs nil)
+    (x_corner const-decl "assertion" hoare_logic_proofs nil)
+    (// const-decl "bool" hoare_triples nil)
+    (x_quotient_interm const-decl "assertion" hoare_logic_proofs nil)
+    (nnint_times_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (mult_divides1 application-judgement "(divides(n))" divides nil)
+    (mult_divides2 application-judgement "(divides(m))" divides nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (int_times_even_is_even application-judgement "even_int" integers
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (< const-decl "bool" reals nil)
+    (below type-eq-decl nil naturalnumbers nil)
+    (value type-eq-decl nil Hoare_logic nil)
+    (state type-eq-decl nil Hoare_logic nil)
+    (assertion type-eq-decl nil hoare_triples nil)
+    (O const-decl "T3" function_props nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (int_plus_int_is_int application-judgement "int" integers nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (real_le_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (IF const-decl "[boolean, T, T -> T]" if_def nil)
+    (<= const-decl "bool" reals nil)
+    (~ const-decl "bool" hoare_triples nil)
+    (test type-eq-decl nil Hoare_logic nil)
+    (tru const-decl "assertion" hoare_logic_proofs nil))
+   shostak))
+ (soundness 0
+  (soundness-1 nil 3796643871
+   ("" (auto-rewrite-defs)
+    (("" (induct M)
+      (("1" (grind) nil nil) ("2" (grind) nil nil)
+       ("3" (grind) nil nil)
+       ("4" (skosimp*)
+        (("4" (expand "Proof?" -2)
+          (("4" (flatten)
+            (("4" (expand "valid" 1)
+              (("4" (expand "valid" -1)
+                (("4"
+                  (lemma "while_rule"
+                   ("P" "while_step1_var!1`pre" "C"
+                    "wcond(while_step1_var!1`prog)" "S"
+                    "body(while_step1_var!1`prog)"))
+                  (("4" (rewrite -4 -1)
+                    (("4" (rewrite -4 -1)
+                      (("4" (rewrite -4 -1)
+                        (("4" (rewrite -4 1)
+                          (("4"
+                            (case "while_step1_var!1`prog = wcond(while_step1_var!1`prog) ** body(while_step1_var!1`prog)")
+                            (("1" (rewrite -1 -2 :dir RL)
+                              (("1" (prop) nil nil)) nil)
+                             ("2" (delete 2)
+                              (("2"
+                                (delete -1 -2 -4)
+                                (("2"
+                                  (case
+                                   "FORALL (p: program): while?(p) IMPLIES p = wcond(p) ** body(p)")
+                                  (("1"
+                                    (instantiate
+                                     -1
+                                     ("while_step1_var!1`prog"))
+                                    (("1" (prop) nil nil))
+                                    nil)
+                                   ("2"
+                                    (delete -1 2)
+                                    (("2"
+                                      (induct p)
+                                      (("1" (grind) nil nil)
+                                       ("2" (grind) nil nil)
+                                       ("3" (grind) nil nil)
+                                       ("4" (grind) nil nil)
+                                       ("5" (grind) nil nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil)
+       ("5" (skosimp*)
+        (("5" (expand "Proof?" -3)
+          (("5" (flatten)
+            (("5" (expand "valid" *)
+              (("5" (rewrite -4 *)
+                (("5" (rewrite -4 *)
+                  (("5" (rewrite -4 *)
+                    (("5" (rewrite -4 *)
+                      (("5" (rewrite -4 *)
+                        (("5" (rewrite -4 *)
+                          (("5" (rewrite -4 *)
+                            (("5"
+                              (case "FORALL (p: program): seq?(p) IMPLIES p = left(p) ## right(p)")
+                              (("1"
+                                (instantiate
+                                 -1
+                                 ("seq_step1_var!1`prog"))
+                                (("1" (grind) nil nil))
+                                nil)
+                               ("2"
+                                (delete - 2)
+                                (("2"
+                                  (induct p)
+                                  (("1" (grind) nil nil)
+                                   ("2" (grind) nil nil)
+                                   ("3" (grind) nil nil)
+                                   ("4" (grind) nil nil)
+                                   ("5" (grind) nil nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil)
+       ("6" (grind) nil nil))
+      nil))
+    nil)
+   ((conseq const-decl "bool" hoare_triples nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (O const-decl "finseq" finite_sequences nil)
+    (splice const-decl "trace" Hoare_logic nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (right adt-accessor-decl "[(seq?) -> program]" Hoare_logic nil)
+    (left adt-accessor-decl "[(seq?) -> program]" Hoare_logic nil)
+    (|##| adt-constructor-decl "[[program, program] -> (seq?)]"
+     Hoare_logic nil)
+    (seq? adt-recognizer-decl "[program -> boolean]" Hoare_logic nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (** adt-constructor-decl "[[test, program] -> (while?)]"
+     Hoare_logic nil)
+    (program_induction formula-decl nil Hoare_logic nil)
+    (while_rule formula-decl nil hoare_triples nil)
+    (test type-eq-decl nil Hoare_logic nil)
+    (while? adt-recognizer-decl "[program -> boolean]" Hoare_logic nil)
+    (wcond adt-accessor-decl "[(while?) -> test]" Hoare_logic nil)
+    (body adt-accessor-decl "[(while?) -> program]" Hoare_logic nil)
+    (~ const-decl "bool" hoare_triples nil)
+    (/\\ const-decl "bool" hoare_triples nil)
+    (O const-decl "T3" function_props nil)
+    (first const-decl "state" Hoare_logic nil)
+    (last const-decl "state" Hoare_logic nil)
+    (triple_holds const-decl "bool" hoare_triples nil)
+    (triple_valid const-decl "bool" hoare_triples nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (> const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (below type-eq-decl nil nat_types nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (>= const-decl "bool" reals nil) (< const-decl "bool" reals nil)
+    (below type-eq-decl nil naturalnumbers nil)
+    (value type-eq-decl nil Hoare_logic nil)
+    (state type-eq-decl nil Hoare_logic nil)
+    (finseq type-eq-decl nil finite_sequences nil)
+    (trace type-eq-decl nil Hoare_logic nil)
+    ([\|\|] def-decl "bool" Hoare_logic nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (preProof_induction formula-decl nil hoare_logic_proofs nil)
+    (conclusion shared-adt-accessor-decl "[preProof -> triple]"
+     hoare_logic_proofs nil)
+    (valid const-decl "bool" hoare_logic_proofs nil)
+    (triple type-eq-decl nil hoare_logic_proofs nil)
+    (program type-decl nil Hoare_logic nil)
+    (assertion type-eq-decl nil hoare_triples nil)
+    (Proof? def-decl "bool" hoare_logic_proofs nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (preProof type-decl nil hoare_logic_proofs nil))
+   shostak))
+ (Hoare_Completeness 0
+  (Hoare_Completeness-2 "" 3796693847
+   ("" (auto-rewrite-defs)
+    (("" (auto-rewrite "mkpreProof_skip")
+      (("" (auto-rewrite "mkpreProof_assign")
+        (("" (auto-rewrite "mkpreProof_conseq_step")
+          (("" (auto-rewrite "mkpreProof_ift_step")
+            (("" (induct S)
+              (("1" (skosimp*)
+                (("1" (instantiate 1 "mkpreProof_skip(Q!1)")
+                  (("1" (auto-rewrite "wlp_skip")
+                    (("1" (grind) nil nil)) nil))
+                  nil))
+                nil)
+               ("2" (skosimp*)
+                (("2"
+                  (instantiate 1
+                   "mkpreProof_assign(Q!1, assign1_var!1)")
+                  (("2" (auto-rewrite "wlp_assign")
+                    (("2" (grind) nil nil)) nil))
+                  nil))
+                nil)
+               ("3" (skosimp*)
+                (("3" (instantiate -1 "Q!1")
+                  (("3" (instantiate -2 "Q!1")
+                    (("3" (skosimp*)
+                      (("3"
+                        (instantiate 1
+                         "mkpreProof_ift_step((IF IF1_var!1 THEN IF2_var!1 ELSE IF3_var!1 ENDIF), IF1_var!1, Q!1, M!1, M!2)")
+                        (("3"
+                          (lemma "wlp_cond"
+                           ("C" "IF1_var!1" "S1" "IF2_var!1" "S2"
+                            "IF3_var!1" "Q" "Q!1"))
+                          (("3" (decompose-equality -1)
+                            (("3" (grind)
+                              (("1"
+                                (apply-extensionality 1)
+                                (("1"
+                                  (delete 2)
+                                  (("1" (grind) nil nil))
+                                  nil))
+                                nil)
+                               ("2"
+                                (apply-extensionality 1)
+                                (("2"
+                                  (delete 2)
+                                  (("2" (grind) nil nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("4" (skosimp*)
+                (("4" (name "wc" "doubletimes1_var!1")
+                  (("4" (name "ws" "doubletimes2_var!1")
+                    (("4" (rewrite -1 *)
+                      (("4" (rewrite -1 *)
+                        (("4" (instantiate -1 "wlp(wc ** ws)(Q!1)")
+                          (("4" (skolem! -1)
+                            (("4"
+                              (case "conseq(wlp(wc ** ws)(Q!1) /\\ wc, wlp(ws)(wlp(wc ** ws)(Q!1)))")
+                              (("1"
+                                (case
+                                 "conseq(wlp(wc ** ws)(Q!1) /\\ ~wc, Q!1)")
+                                (("1"
+                                  (name
+                                   "wbp"
+                                   "mkpreProof_conseq_step(wlp(wc ** ws)(Q!1) /\\ wc, wlp(wc ** ws)(Q!1), wc ** ws, M!1)")
+                                  (("1"
+                                    (name
+                                     "wp"
+                                     "while_step(mkTriple(wlp(wc ** ws)(Q!1), wc ** ws, wlp(wc ** ws)(Q!1) /\\ ~wc), wbp)")
+                                    (("1"
+                                      (instantiate
+                                       1
+                                       "mkpreProof_conseq_step(wlp(wc ** ws)(Q!1), Q!1, wc ** ws, wp)")
+                                      (("1"
+                                        (rewrite -1 1 :dir RL)
+                                        (("1"
+                                          (rewrite -1 1 :dir RL)
+                                          (("1"
+                                            (auto-rewrite "soundness")
+                                            (("1"
+                                              (expand "Proves" 1)
+                                              (("1"
+                                                (split)
+                                                (("1"
+                                                  (expand*
+                                                   "mkpreProof_conseq_step"
+                                                   1)
+                                                  (("1"
+                                                    (case
+                                                     "FORALL (p: assertion): conseq(p, p)")
+                                                    (("1"
+                                                      (expand*
+                                                       "mkTriple"
+                                                       1)
+                                                      (("1"
+                                                        (expand
+                                                         "Proof?"
+                                                         1)
+                                                        (("1"
+                                                          (split)
+                                                          (("1"
+                                                            (instantiate
+                                                             -1
+                                                             "wlp(wc ** ws)(Q!1)")
+                                                            (("1"
+                                                              (propax)
+                                                              nil
+                                                              nil))
+                                                            nil)
+                                                           ("2"
+                                                            (propax)
+                                                            nil
+                                                            nil)
+                                                           ("3"
+                                                            (expand
+                                                             "Proof?"
+                                                             1)
+                                                            (("3"
+                                                              (expand
+                                                               "Proves"
+                                                               -4)
+                                                              (("3"
+                                                                (flatten
+                                                                 -4)
+                                                                (("3"
+                                                                  (split
+                                                                   1)
+                                                                  (("1"
+                                                                    (assert)
+                                                                    nil
+                                                                    nil)
+                                                                   ("2"
+                                                                    (expand
+                                                                     "Proof?"
+                                                                     1)
+                                                                    (("2"
+                                                                      (split)
+                                                                      (("1"
+                                                                        (rewrite
+                                                                         -5
+                                                                         1)
+                                                                        (("1"
+                                                                          (beta
+                                                                           1)
+                                                                          (("1"
+                                                                            (propax)
+                                                                            nil
+                                                                            nil))
+                                                                          nil))
+                                                                        nil)
+                                                                       ("2"
+                                                                        (rewrite
+                                                                         -5
+                                                                         1)
+                                                                        (("2"
+                                                                          (beta
+                                                                           1)
+                                                                          (("2"
+                                                                            (instantiate
+                                                                             -1
+                                                                             "wlp(wc ** ws)(Q!1)")
+                                                                            (("2"
+                                                                              (propax)
+                                                                              nil
+                                                                              nil))
+                                                                            nil))
+                                                                          nil))
+                                                                        nil)
+                                                                       ("3"
+                                                                        (propax)
+                                                                        nil
+                                                                        nil))
+                                                                      nil))
+                                                                    nil))
+                                                                  nil))
+                                                                nil))
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil)
+                                                     ("2"
+                                                      (delete
+                                                       -1
+                                                       -2
+                                                       -3
+                                                       2)
+                                                      (("2"
+                                                        (grind)
+                                                        nil
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil)
+                                                 ("2"
+                                                  (assert)
+                                                  nil
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil)
+                                 ("2"
+                                  (delete -2 -1 2)
+                                  (("2"
+                                    (expand "conseq")
+                                    (("2"
+                                      (skosimp*)
+                                      (("2"
+                                        (expand "/\\" -1)
+                                        (("2"
+                                          (flatten -1)
+                                          (("2"
+                                            (expand "wlp" -1)
+                                            (("2"
+                                              (instantiate
+                                               -1
+                                               "(# length := 2, seq := (LAMBDA (n: below[2]): s!1) #)")
+                                              (("2"
+                                                (expand "[||]" -1)
+                                                (("2"
+                                                  (expand "first" -1)
+                                                  (("2"
+                                                    (expand "~" -2)
+                                                    (("2"
+                                                      (grind
+                                                       :exclude
+                                                       "[||]")
+                                                      nil
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil)
+                               ("2"
+                                (delete -1 2)
+                                (("2"
+                                  (expand "conseq" 1)
+                                  (("2"
+                                    (skosimp*)
+                                    (("2"
+                                      (lemma
+                                       "wlp_is_inv"
+                                       ("S"
+                                        "wc ** ws"
+                                        "C"
+                                        "wc"
+                                        "S1"
+                                        "ws"
+                                        "Q"
+                                        "Q!1"))
+                                      (("2"
+                                        (prop)
+                                        (("2"
+                                          (grind :exclude "[||]")
+                                          nil
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("5" (skosimp*)
+                (("5"
+                  (lemma "wlp_seq"
+                   ("S1" "doublesharp1_var!1" "S2" "doublesharp2_var!1"
+                    "Q" "Q!1"))
+                  (("5" (rewrite -1 1)
+                    (("5" (instantiate -2 "Q!1")
+                      (("5"
+                        (instantiate -1 "wlp(doublesharp2_var!1)(Q!1)")
+                        (("5" (skosimp*)
+                          (("5"
+                            (instantiate 1
+                             "seq_step(mkTriple(wlp(doublesharp1_var!1)(wlp(doublesharp2_var!1)(Q!1)), doublesharp1_var!1 ## doublesharp2_var!1, Q!1), M!1, M!2)")
+                            (("5" (grind :exclude "[||]") nil nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((|##| adt-constructor-decl "[[program, program] -> (seq?)]"
+     Hoare_logic nil)
+    (seq? adt-recognizer-decl "[program -> boolean]" Hoare_logic nil)
+    (seq_step adt-constructor-decl
+     "[[triple, preProof, preProof] -> (seq_step?)]" hoare_logic_proofs
+     nil)
+    (seq_step? adt-recognizer-decl "[preProof -> boolean]"
+     hoare_logic_proofs nil)
+    (wlp_seq formula-decl nil hoare_triples nil)
+    (** adt-constructor-decl "[[test, program] -> (while?)]"
+     Hoare_logic nil)
+    (while? adt-recognizer-decl "[program -> boolean]" Hoare_logic nil)
+    (triple_holds const-decl "bool" hoare_triples nil)
+    (triple_valid const-decl "bool" hoare_triples nil)
+    (wlp_is_inv formula-decl nil hoare_triples nil)
+    (while_step? adt-recognizer-decl "[preProof -> boolean]"
+     hoare_logic_proofs nil)
+    (while_step adt-constructor-decl
+     "[[triple, preProof] -> (while_step?)]" hoare_logic_proofs nil)
+    (~ const-decl "bool" hoare_triples nil)
+    (/\\ const-decl "bool" hoare_triples nil)
+    (// const-decl "bool" hoare_triples nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (mkpreProof_conseq_step const-decl "preProof" hoare_logic_proofs
+     nil)
+    (conseq const-decl "bool" hoare_triples nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (> const-decl "bool" reals nil)
+    (below type-eq-decl nil nat_types nil)
+    (finseq type-eq-decl nil finite_sequences nil)
+    (trace type-eq-decl nil Hoare_logic nil)
+    (first const-decl "state" Hoare_logic nil)
+    ([\|\|] def-decl "bool" Hoare_logic nil)
+    (last const-decl "state" Hoare_logic nil)
+    (wlp_cond formula-decl nil hoare_triples nil)
+    (test type-eq-decl nil Hoare_logic nil)
+    (IF adt-constructor-decl "[[test, program, program] -> (ift?)]"
+     Hoare_logic nil)
+    (ift? adt-recognizer-decl "[program -> boolean]" Hoare_logic nil)
+    (mkpreProof_ift_step const-decl "preProof" hoare_logic_proofs nil)
+    (assignment type-eq-decl nil Hoare_logic nil)
+    (mkpreProof_assign const-decl "preProof" hoare_logic_proofs nil)
+    (wlp_assign formula-decl nil hoare_triples nil)
+    (mkpreProof_skip const-decl "preProof" hoare_logic_proofs nil)
+    (Proof? def-decl "bool" hoare_logic_proofs nil)
+    (wlp_skip formula-decl nil hoare_triples nil)
+    (program_induction formula-decl nil Hoare_logic nil)
+    (wlp const-decl "bool" hoare_triples nil)
+    (mkTriple const-decl "triple" hoare_logic_proofs nil)
+    (Proves const-decl "bool" hoare_logic_proofs nil)
+    (triple type-eq-decl nil hoare_logic_proofs nil)
+    (preProof type-decl nil hoare_logic_proofs nil)
+    (assertion type-eq-decl nil hoare_triples nil)
+    (state type-eq-decl nil Hoare_logic nil)
+    (value type-eq-decl nil Hoare_logic nil)
+    (below type-eq-decl nil naturalnumbers nil)
+    (< const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (program type-decl nil Hoare_logic nil))
+   shostak)
+  (Hoare_Completeness-1 nil 3796661572
+   ("" (auto-rewrite-defs)
+    (("" (auto-rewrite "mkpreProof_skip")
+      (("" (auto-rewrite "mkpreProof_assign")
+        (("" (auto-rewrite "mkpreProof_conseq_step")
+          (("" (auto-rewrite "mkpreProof_ift_step")
+            (("" (induct S)
+              (("1" (skosimp*)
+                (("1" (instantiate 1 "mkpreProof_skip(Q!1)")
+                  (("1" (auto-rewrite "wlp_skip")
+                    (("1" (grind) nil nil)) nil))
+                  nil))
+                nil)
+               ("2" (skosimp*)
+                (("2"
+                  (instantiate 1
+                   "mkpreProof_assign(Q!1, assign1_var!1)")
+                  (("2" (auto-rewrite "wlp_assign")
+                    (("2" (grind) nil nil)) nil))
+                  nil))
+                nil)
+               ("3" (skosimp*)
+                (("3" (instantiate -1 "Q!1")
+                  (("3" (instantiate -2 "Q!1")
+                    (("3" (skosimp*)
+                      (("3"
+                        (instantiate 1
+                         "mkpreProof_ift_step((IF IF1_var!1 THEN IF2_var!1 ELSE IF3_var!1 ENDIF), IF1_var!1, Q!1, M!1, M!2)")
+                        (("3"
+                          (lemma "wlp_cond"
+                           ("C" "IF1_var!1" "S1" "IF2_var!1" "S2"
+                            "IF3_var!1" "Q" "Q!1"))
+                          (("3" (decompose-equality -1)
+                            (("3" (grind)
+                              (("1"
+                                (apply-extensionality 1)
+                                (("1"
+                                  (delete 2)
+                                  (("1" (grind) nil nil))
+                                  nil))
+                                nil)
+                               ("2"
+                                (apply-extensionality 1)
+                                (("2"
+                                  (delete 2)
+                                  (("2" (grind) nil nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("4" (skosimp*)
+                (("4" (name "wc" "doubletimes1_var!1")
+                  (("4" (name "ws" "doubletimes2_var!1")
+                    (("4" (rewrite -1 *)
+                      (("4" (rewrite -1 *)
+                        (("4" (instantiate -1 "wlp(wc ** ws)(Q!1)")
+                          (("4" (skolem! -1)
+                            (("4"
+                              (case "conseq(wlp(wc ** ws)(Q!1) /\\ wc, wlp(ws)(wlp(wc ** ws)(Q!1)))")
+                              (("1"
+                                (case
+                                 "conseq(wlp(wc ** ws)(Q!1) /\\ ~wc, Q!1)")
+                                (("1"
+                                  (name
+                                   "wbp"
+                                   "mkpreProof_conseq_step(wlp(wc ** ws)(Q!1) /\\ wc, wlp(wc ** ws)(Q!1), wc ** ws, M!1)")
+                                  (("1"
+                                    (name
+                                     "wp"
+                                     "while_step(mkTriple(wlp(wc ** ws)(Q!1), wc ** ws, wlp(wc ** ws)(Q!1) /\\ ~wc), wbp)")
+                                    (("1"
+                                      (instantiate
+                                       1
+                                       "mkpreProof_conseq_step(wlp(wc ** ws)(Q!1), Q!1, wc ** ws, wp)")
+                                      (("1"
+                                        (rewrite -1 1 :dir RL)
+                                        (("1"
+                                          (rewrite -1 1 :dir RL)
+                                          (("1"
+                                            (auto-rewrite "soundness")
+                                            (("1"
+                                              (expand "Proves" 1)
+                                              (("1"
+                                                (split)
+                                                (("1"
+                                                  (expand*
+                                                   "mkpreProof_conseq_step"
+                                                   1)
+                                                  (("1"
+                                                    (expand "Proof?" 1)
+                                                    (("1"
+                                                      (postpone)
+                                                      nil
+                                                      nil))
+                                                    nil))
+                                                  nil)
+                                                 ("2"
+                                                  (assert)
+                                                  nil
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil)
+                                 ("2" (postpone) nil nil))
+                                nil)
+                               ("2" (postpone) nil nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("5" (postpone) nil nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   nil shostak)))
+

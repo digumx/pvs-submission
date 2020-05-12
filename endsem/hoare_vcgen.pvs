@@ -1,0 +1,126 @@
+hoare_vcgen  % [ parameters ]
+		: THEORY
+
+  % ASSUMING
+   % assuming declarations
+  % ENDASSUMING
+
+  BEGIN
+    IMPORTING hoare_logic_proofs
+    
+    P, Q, C, I: VAR assertion
+    s: VAR state
+    S, S1, S2: VAR program
+    A: VAR assignment;
+
+    %=>(P, Q): bool = (FORALL (s): P(s) => Q(s));
+    %other ops already defined on assertions: /\ (and), // (or)
+
+    taut : LEMMA (FORALL (s: state): (P => P)(s))
+    taut2: LEMMA (P => P) = (~P // P)
+    ttrue: assertion = (LAMBDA (s: state): true)
+    
+    annotatedProgram : DATATYPE
+      BEGIN
+       skip: skip?
+       assign(update : assignment): assign?
+       if(ifcond: test, thenprog: annotatedProgram,
+       elseprog: annotatedProgram): ift?
+       while(wcond: test, body : annotatedProgram,
+             invariant: assertion): while?
+       ##(left, right: annotatedProgram): seq?
+      END annotatedProgram
+
+
+    SS: VAR annotatedProgram
+    %% de-anotates an annotated program returning the original program
+    extract(SS): RECURSIVE program =
+      CASES SS OF
+        skip: skip,
+        assign(A): assign(A),
+        if(C, SS1, SS2): IF C THEN extract(SS1) ELSE extract(SS2) ENDIF,
+        while(C, SS1, I): C ** extract(SS1),
+        ##(SS1, SS2): extract(SS1) ## extract(SS2)
+      ENDCASES
+      MEASURE SS BY <<
+
+
+     % pre generates weakest preconditions for straight-line programs and constructs
+     % For loops pre just stops by returning the invariant annotated for the loop
+     pre(SS)(Q) : RECURSIVE assertion =
+       CASES SS OF
+         skip: Q,
+         assign(A): Q o A,
+         if(C, SS1, SS2): (C /\ pre(SS1)(Q)) // (~C /\ pre(SS2)(Q)),
+         while(C, SS1, I): I,
+         ##(SS1, SS2): pre(SS1)(pre(SS2)(Q))
+       ENDCASES
+       MEASURE SS BY <<
+
+    %%vc generates (an checks) a conjunction of all the VCs required to check if 
+    vc(SS)(Q): RECURSIVE bool =
+      CASES SS OF
+        skip: TRUE,
+        assign(A): TRUE,
+        if(C, SS1, SS2): vc(SS1)(Q) AND vc(SS2)(Q),
+        while(C, SS1, I): vc(SS1)(I)
+                          AND (FORALL (s: state): ((C /\ I) => pre(SS1)(I))(s))
+                          AND (FORALL (s: state): ((~C /\ I) =>  Q)(s)),
+        ##(SS1, SS2): vc(SS2)(Q) AND vc(SS1)(pre(SS2)(Q))
+      ENDCASES
+      MEASURE SS BY <<
+
+      vc_pre: LEMMA vc(SS)(Q) => triple_valid(pre(SS)(Q), extract(SS), Q)
+
+      %% some examples of use of vc for verifying specific programs
+      skip2: program = skip ## skip
+      sskip2: annotatedProgram = skip ## skip
+      check_vc4sskip2: LEMMA vc(sskip2)(Q)
+      check_sskip2: LEMMA vc(sskip2)(Q) => triple_valid(pre(sskip2)(Q), extract(sskip2), Q)
+      check_sskip_alt: LEMMA (Q => pre(sskip2)(Q)) = ttrue
+
+      %swap: program = assign(a1) ## assign(a2) ## assign(a3) % SWAP: z := x; x := y; y := z;
+      sswap: annotatedProgram = assign(a1) ## assign(a2) ## assign(a3)
+      checkvc4sswap: LEMMA vc(sswap)(Q)
+      %check_sswap: LEMMA vc(sswap)(Q) => triple_valid(pre(sskip2)(Q), extract(sskip2), Q)
+      pre4swap: assertion = (xeqx0 /\ yeqy0)
+      post4swap: assertion = (xeqy0 /\ yeqx0)
+
+      check_vc4sswap: LEMMA vc(sswap)(xeqy0 /\ yeqx0)
+      check_sswap: LEMMA (FORALL (s: state): (pre4swap => pre(sswap)(post4swap))(s))
+
+      pre4rotate3: assertion = xeqx0 /\ yeqy0 /\ zeqz0 %/\ weqw0
+      post4rotate3: assertion = xeqx0 /\ yeqy0 /\ zeqz0 %/\ weqw0
+      %rotate: program = assign(x_gets_y) ## assign(y_gets_z) ## assign(z_gets_w) ## assign(w_gets_x)
+      rrotate: annotatedProgram = assign(w_gets_x) ## assign(x_gets_y) ## assign(y_gets_z) ## assign(z_gets_w)
+      rrotate3: annotatedProgram = rrotate ## rrotate ## rrotate %## rrotate
+      
+      check_rotate: LEMMA (pre4rotate3 => pre(rrotate3)(post4rotate3)) = ttrue
+
+      % Solution to Exercise 3
+      
+      % Firstly we write the annotated program. As before, 0 is r, 1 is x, 2 is y and 3 is z.
+      % Subtraction of natural numbers are clamped below at 0.
+      
+      slow_div: annotatedProgram =
+        assign(LAMBDA (s: state): s WITH [(0) := s(1)]) ##		% r = x
+	assign(LAMBDA (s: state): s WITH [(3) := 0]) ##			% z = 0
+	while((LAMBDA (s: state): s(2) <= s(0)), (   			% while y <= r
+	  assign(LAMBDA (s: state): s WITH [(0) :=
+	    IF s(0) >= s(2) THEN s(0) - s(2) ELSE 0 ENDIF]) ##		% r = r >= y ? r - y : 0
+	  assign(LAMBDA (s: state): s WITH [(3) := s(3) + 1])		% z = z + 1
+	), LAMBDA (s: state): s(1) = s(0) + s(2) * s(3))  		% invariant: x = r + y*z
+
+      % Now, we define our pre and post conditions as assertions
+
+      precond: assertion = LAMBDA (s: state): TRUE
+      postcond: assertion = LAMBDA (s: state): s(1) = s(0) + s(2) * s(3) AND s(0) < s(2)
+      			    	       	       	      	     	        % x = r + y*z and r < y
+									
+      % Finally, we write the following lemma to prove the correctness of the above program. The proof of
+      % the lemma below uses the vc_pte
+
+      slow_div_correct: LEMMA triple_valid(precond, extract(slow_div), postcond)
+
+
+  END hoare_vcgen
